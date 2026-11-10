@@ -1,0 +1,10 @@
+# Test PukiWiki for development (official PukiWiki 1.5.4, EUC-JP). Admin password: testpass
+# The host port can be changed with PUKIWIKI_TEST_PORT (default 18090).
+name: noren-pukiwiki-test
+services:
+  pukiwiki-test:
+    build: .
+    image: noren-pukiwiki-test:latest
+    container_name: noren-pukiwiki-test
+    ports:
+      - "127.0.0.1:${PUKIWIKI_TEST_PORT:-18090}:80"

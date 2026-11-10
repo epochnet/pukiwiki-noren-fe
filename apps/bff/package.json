@@ -1,0 +1,30 @@
+{
+  "name": "@noren/bff",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=../../.env src/main.ts",
+    "start": "node src/main.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.6.0",
+    "@hono/node-server": "^2.1.6",
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "diff": "^9.0.0",
+    "hono": "^4.13.17",
+    "iconv-lite": "^0.7.3",
+    "linkedom": "^0.18.15",
+    "markdown-it": "^15.0.3",
+    "sanitize-html": "^2.18.1",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/diff": "^7.0.2",
+    "@types/markdown-it": "^14.2.0",
+    "@types/node": "^26.6.6",
+    "@types/sanitize-html": "^2.16.2",
+    "typescript": "^7.0.2"
+  }
+}

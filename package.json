@@ -1,0 +1,24 @@
+{
+  "name": "pukiwiki-noren-fe",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev:bff": "npm run dev -w apps/bff",
+    "dev:web": "npm run dev -w apps/web",
+    "build": "npm run build -w apps/web",
+    "start": "npm run start -w apps/bff",
+    "test": "node --test packages/syntax/test/*.test.ts apps/bff/test/*.test.ts",
+    "typecheck": "tsc -p apps/web --noEmit && tsc -p apps/bff --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.0"
+  }
+}

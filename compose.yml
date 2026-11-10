@@ -1,0 +1,32 @@
+# PukiwikiNorenFE (+ optional pukiwiki-mcp for the AI assistant).
+# Published on the host's 127.0.0.1 only. To share it, put an authenticating
+# reverse proxy (or `tailscale serve`) in front and set AUTH_MODE.
+services:
+  pukiwiki-noren-fe:
+    build: .
+    image: pukiwiki-noren-fe:latest
+    env_file: .env
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - noren-data:/data
+    restart: unless-stopped
+
+  # pukiwiki-mcp (https://github.com/epochnet/pukiwiki-mcp), used read-only by the AI assistant.
+  # Start with `docker compose --profile mcp up -d` and set MCP_URL=http://pukiwiki-mcp:8000/mcp.
+  # Not published on the host (container network only).
+  pukiwiki-mcp:
+    build: https://github.com/epochnet/pukiwiki-mcp.git
+    image: pukiwiki-mcp:latest
+    environment:
+      PUKIWIKI_URL: ${PUKIWIKI_URL}
+      PUKIWIKI_MCP_TRANSPORT: streamable-http
+      PUKIWIKI_MCP_HOST: 0.0.0.0
+      PUKIWIKI_MCP_PORT: "8000"
+    expose:
+      - "8000"
+    restart: unless-stopped
+    profiles: ["mcp"]
+
+volumes:
+  noren-data:

@@ -1,0 +1,21 @@
+# Several wikis in one instance: set WIKIS_CONFIG=/config/wikis.yaml (instead of PUKIWIKI_URL).
+wikis:
+  - id: main
+    label: Wiki
+    url: https://wiki.example.com/
+    encoding: auto
+    concurrency: 4
+    admin_password_env: PUKIWIKI_ADMIN_PASSWORD
+    # mcp:
+    #   url: http://pukiwiki-mcp:8000/mcp
+    agent:
+      enabled: true
+      exclude_pages: ["Secret", "Secret/*"]
+    hidden_pages: ["RecentChanges", "RecentDeleted", "MenuBar", "SideBar", "AutoTicketLinkName", "InterWikiName", ":*"]
+
+  - id: lab
+    label: Lab Wiki
+    url: https://lab.example.com/wiki/
+    encoding: utf-8
+    agent:
+      enabled: false

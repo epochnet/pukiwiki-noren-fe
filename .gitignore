@@ -1,0 +1,11 @@
+node_modules/
+dist/
+data/
+.env
+*.local
+dev/corpus/
+e2e/report/
+e2e/screenshots/
+test-results/
+dev/pukiwiki-test/plugin/*
+!dev/pukiwiki-test/plugin/.gitkeep

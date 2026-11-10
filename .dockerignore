@@ -1,0 +1,10 @@
+**/node_modules
+apps/web/dist
+data
+.env
+.git
+test-results
+e2e
+mockups
+docs
+dev
