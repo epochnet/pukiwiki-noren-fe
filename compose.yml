@@ -4,7 +4,7 @@
 services:
   pukiwiki-noren-fe:
     build: .
-    image: pukiwiki-noren-fe:latest
+    image: ghcr.io/epochnet/pukiwiki-noren-fe:latest
     env_file: .env
     ports:
       - "127.0.0.1:8080:8080"
@@ -17,7 +17,7 @@ services:
   # Not published on the host (container network only).
   pukiwiki-mcp:
     build: https://github.com/epochnet/pukiwiki-mcp.git
-    image: pukiwiki-mcp:latest
+    image: ghcr.io/epochnet/pukiwiki-mcp:latest
     environment:
       PUKIWIKI_URL: ${PUKIWIKI_URL}
       PUKIWIKI_MCP_TRANSPORT: streamable-http

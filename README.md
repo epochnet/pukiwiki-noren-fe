@@ -82,9 +82,12 @@ Claude API のほか、OpenAI 互換 API（llama.cpp・vLLM・Ollama など手�
 ## 起動（Docker）
 
 ```bash
-cp .env.example .env          # PUKIWIKI_URL などを設定
-docker compose up -d --build  # http://127.0.0.1:8080
+cp .env.example .env   # PUKIWIKI_URL などを設定
+docker compose pull    # ghcr.io/epochnet/pukiwiki-noren-fe を取得
+docker compose up -d   # http://127.0.0.1:8080
 ```
+
+- イメージはリリースごとに `ghcr.io/epochnet/pukiwiki-noren-fe` に置いています（`:latest` と `:<バージョン>`）。手元のソースからビルドするときは `docker compose up -d --build` です。
 
 - 初回起動時に全ページの索引を作ります（ページ数に応じて数分〜十数分）。以後は 60 秒ごとに最近の更新から差分を同期し、毎日 3 時に全件を同期します。
 - `PUKIWIKI_ADMIN_PASSWORD` を設定すると、添付のアップロード（管理者限定の設定の Wiki）でパスワードを入力せずに済みます。凍結・名前変更・添付の削除は、その都度入力します。
