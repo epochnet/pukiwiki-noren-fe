@@ -25,14 +25,13 @@ function parseQuery(driver: PukiWikiDriver, q: string): Record<string, string> {
 export function rewriteHref(driver: PukiWikiDriver, wiki: string, href: string): { href: string; kind: 'page' | 'missing' | 'attach' | 'external' | 'classic' | 'anchor' } {
   const h = htmlUnescape(href).trim();
   if (h.startsWith('#')) return { href: h, kind: 'anchor' };
-  const base = driver.baseUrl;
-  let rest: string | null = null;
-  if (h.startsWith('./') || h.startsWith('?')) rest = h.replace(/^\.\//, '');
-  else if (h.startsWith(base)) rest = h.slice(base.length);
+  let rest: string | null = driver.localPart(h);
+  if (rest !== null) { /* absolute link into this wiki */ }
+  else if (h.startsWith('./') || h.startsWith('?')) rest = h.replace(/^\.\//, '');
   else if (/^[a-z]+:/i.test(h) || h.startsWith('//')) return { href: h, kind: 'external' };
   else rest = h;
   const qi = rest.indexOf('?');
-  if (qi < 0) return { href: driver.urlFor('').replace(/\?$/, '') + rest, kind: 'classic' };
+  if (qi < 0) return { href: driver.publicUrlFor('').replace(/[?&]$/, '') + rest, kind: 'classic' };
   let q = rest.slice(qi + 1);
   let frag = '';
   const hi = q.indexOf('#');
@@ -52,13 +51,14 @@ export function rewriteHref(driver: PukiWikiDriver, wiki: string, href: string):
   if (p.plugin === 'attach' && p.pcmd === 'open' && p.file && p.refer) {
     return { href: `/api/w/${encodeURIComponent(wiki)}/attachments/raw?page=${encodeURIComponent(p.refer)}&file=${encodeURIComponent(p.file)}${p.age ? `&age=${p.age}` : ''}`, kind: 'attach' };
   }
-  return { href: driver.urlFor(q) + frag, kind: 'classic' };
+  return { href: driver.publicUrlFor(q) + frag, kind: 'classic' };
 }
 
 function rewriteSrc(driver: PukiWikiDriver, wiki: string, src: string): string {
   const s = htmlUnescape(src).trim();
-  if (/^(data:|https?:\/\/(?!))/.test(s) && !s.startsWith(driver.baseUrl)) return s;
-  const rest = s.startsWith(driver.baseUrl) ? s.slice(driver.baseUrl.length) : s.replace(/^\.\//, '');
+  const local = driver.localPart(s);
+  if (/^(data:|https?:\/\/(?!))/.test(s) && local === null) return s;
+  const rest = local ?? s.replace(/^\.\//, '');
   if (rest.startsWith('?') || rest.startsWith('index.php?')) {
     const q = rest.slice(rest.indexOf('?') + 1);
     const p = parseQuery(driver, q);

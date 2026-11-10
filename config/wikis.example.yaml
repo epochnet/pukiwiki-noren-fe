@@ -3,6 +3,7 @@ wikis:
   - id: main
     label: Wiki
     url: https://wiki.example.com/
+    # public_url: https://wiki.example.com/   # url が内部の名前のとき、利用者向けのリンクに使う URL
     encoding: auto
     concurrency: 4
     admin_password_env: PUKIWIKI_ADMIN_PASSWORD

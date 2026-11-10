@@ -126,7 +126,7 @@ export function api(app: AppConfig, wikis: Map<string, WikiCtx>): Hono<Env> {
 
   r.get('/me', (c) => c.json({ user: c.get('user'), authMode: app.authMode }));
   r.get('/wikis', (c) => c.json([...wikis.values()].map((w) => ({
-    id: w.cfg.id, label: w.cfg.label, url: w.cfg.url, pages: w.db.count(), caps: w.driver.caps,
+    id: w.cfg.id, label: w.cfg.label, url: w.cfg.publicUrl, pages: w.db.count(), caps: w.driver.caps,
   }))));
 
   // ---- resolve :wiki
@@ -169,7 +169,7 @@ export function api(app: AppConfig, wikis: Map<string, WikiCtx>): Hono<Env> {
       size: fresh?.size ?? 0,
       attachments: w.db.attachmentsOf(page),
       children: w.db.children(page).length,
-      classicUrl: w.driver.urlFor(w.driver.codec.q(page)),
+      classicUrl: w.driver.publicUrlFor(w.driver.codec.q(page)),
     });
   });
 

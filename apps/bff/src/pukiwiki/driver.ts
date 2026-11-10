@@ -68,6 +68,14 @@ export class PukiWikiDriver {
   }
 
   get baseUrl(): string { return this.base; }
+  /** The wiki's URL as users' browsers reach it (PUKIWIKI_PUBLIC_URL; same as baseUrl unless set). */
+  get publicBaseUrl(): string { return this.cfg.publicUrl; }
+
+  /** The part after the wiki's URL, if `url` points into this wiki (by either URL); otherwise null. */
+  localPart(url: string): string | null {
+    for (const b of [this.base, this.cfg.publicUrl]) if (url.startsWith(b)) return url.slice(b.length);
+    return null;
+  }
 
   // ---------------------------------------------------------------- transport
   private headers(extra: Record<string, string> = {}): Record<string, string> {
@@ -80,6 +88,12 @@ export class PukiWikiDriver {
 
   urlFor(query: string): string {
     return this.base + (this.base.includes('?') ? '&' : '?') + query;
+  }
+
+  /** Link to the classic UI for users (uses the public URL). */
+  publicUrlFor(query: string): string {
+    const b = this.cfg.publicUrl;
+    return b + (b.includes('?') ? '&' : '?') + query;
   }
 
   private async raw(method: 'GET' | 'POST', query: string, body?: Buffer | string, contentType?: string): Promise<Response> {

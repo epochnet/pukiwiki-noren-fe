@@ -111,7 +111,8 @@ docker compose up -d   # http://127.0.0.1:8080
 
 | 変数 | 既定 | 説明 |
 | --- | --- | --- |
-| `PUKIWIKI_URL` | —（必須） | PukiWiki の URL |
+| `PUKIWIKI_URL` | —（必須） | PukiWiki の URL（この画面のサーバーから接続する URL） |
+| `PUKIWIKI_PUBLIC_URL` | `PUKIWIKI_URL` と同じ | 利用者のブラウザから開ける PukiWiki の URL。`PUKIWIKI_URL` を Docker のネットワーク内の名前（`http://pukiwiki/` など）にしたとき、「元の画面で開く」などのリンクに使う |
 | `PUKIWIKI_LABEL` | `PukiWiki` | 画面に出す Wiki の名前 |
 | `PUKIWIKI_ENCODING` | `auto` | `auto` / `euc-jp` / `utf-8` |
 | `PUKIWIKI_ADMIN_PASSWORD` | 空 | 添付のアップロードに使う管理者パスワード |

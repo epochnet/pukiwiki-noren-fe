@@ -7,6 +7,8 @@ export interface WikiConfig {
   id: string;
   label: string;
   url: string;
+  /** URL of the same wiki as the users' browsers reach it (links to the classic UI). Defaults to `url`. */
+  publicUrl: string;
   encoding: 'auto' | 'euc-jp' | 'utf-8';
   basicUser?: string;
   basicPassword?: string;
@@ -53,12 +55,15 @@ const DEFAULT_REDACT = [
   String.raw`-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----`,
 ];
 
+const wikiUrl = (u: unknown) => String(u).replace(/\/?$/, '/').replace(/index\.php\/$/, 'index.php');
+
 function wikiFromObject(o: any, i: number): WikiConfig {
   const exclude: string[] = o.agent?.exclude_pages ?? [];
   return {
     id: String(o.id ?? `wiki${i + 1}`),
     label: String(o.label ?? o.id ?? 'PukiWiki'),
-    url: String(o.url).replace(/\/?$/, '/').replace(/index\.php\/$/, 'index.php'),
+    url: wikiUrl(o.url),
+    publicUrl: wikiUrl(o.public_url || o.url),
     encoding: (o.encoding ?? 'auto') as WikiConfig['encoding'],
     basicUser: o.basic_auth?.user ?? fromEnvName(o.basic_auth?.user_env),
     basicPassword: o.basic_auth?.password ?? fromEnvName(o.basic_auth?.password_env),
@@ -85,6 +90,7 @@ export function loadConfig(): AppConfig {
       id: env('PUKIWIKI_ID', 'wiki'),
       label: env('PUKIWIKI_LABEL', 'PukiWiki'),
       url: env('PUKIWIKI_URL'),
+      public_url: env('PUKIWIKI_PUBLIC_URL'),
       encoding: env('PUKIWIKI_ENCODING', 'auto'),
       basic_auth: env('PUKIWIKI_BASIC_USER') ? { user: env('PUKIWIKI_BASIC_USER'), password: env('PUKIWIKI_BASIC_PASSWORD') } : undefined,
       verify_tls: env('PUKIWIKI_VERIFY_TLS', 'true') !== 'false',
